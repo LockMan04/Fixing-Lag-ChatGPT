@@ -1,0 +1,444 @@
+/* Popup styles for Fixing lag ChatGPT extension */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    width: 380px;
+    min-height: 600px;
+    background: #ffffff;
+    color: #333;
+}
+
+.popup-container {
+    background: white;
+    border-radius: 0;
+    margin: 0;
+    overflow: hidden;
+    box-shadow: none;
+    border: none;
+    height: 100%;
+}
+
+.header {
+    background: #ffffff;
+    color: #333;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #e1e1e1;
+    position: relative;
+}
+
+.header h1 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+.header p {
+    font-size: 12px;
+    color: #666;
+}
+
+.header .version {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 10px;
+    color: #999;
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.settings-section {
+    padding: 20px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+    gap: 15px;
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-label {
+    flex: 1;
+    min-width: 0;
+}
+
+.setting-label span {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #333;
+    line-height: 1.2;
+}
+
+.setting-label p {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Toggle switch */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #333;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Input group */
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.input-group input {
+    width: 60px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+    transition: border-color 0.3s;
+    background: white;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.input-suffix {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+}
+
+.actions {
+    padding: 20px;
+    display: flex;
+    gap: 12px;
+    border-top: 1px solid #eee;
+    background: #fafafa;
+}
+
+.save-btn, .reset-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    text-align: center;
+}
+
+.save-btn {
+    background: #333;
+    color: white;
+    border-color: #333;
+}
+
+.save-btn:hover {
+    background: #555;
+    transform: translateY(-1px);
+}
+
+.save-btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.reset-btn {
+    background: white;
+    color: #666;
+    border-color: #ddd;
+}
+
+.reset-btn:hover {
+    background: #f8f9fa;
+    border-color: #999;
+}
+
+.status {
+    padding: 0 20px 10px;
+    text-align: center;
+    font-size: 12px;
+    min-height: 20px;
+}
+
+.status.success {
+    color: #28a745;
+}
+
+.status.error {
+    color: #dc3545;
+}
+
+.footer {
+    background: #f8f9fa;
+    padding: 16px 20px;
+    border-top: 1px solid #eee;
+}
+
+.stats {
+    margin-bottom: 12px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.stat-item:last-child {
+    margin-bottom: 0;
+}
+
+.stat-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #333;
+}
+
+.stat-value.active {
+    color: #28a745;
+}
+
+.stat-value.inactive {
+    color: #dc3545;
+}
+
+.info {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}
+
+.info p {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.info p:last-child {
+    margin-bottom: 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #1e1e1e;
+    }
+    
+    .popup-container {
+        background: #2d2d2d;
+        color: #e1e1e1;
+        border-color: #404040;
+    }
+    
+    .header {
+        background: #2d2d2d;
+        border-bottom-color: #404040;
+    }
+    
+    .header h1 {
+        color: #e1e1e1;
+    }
+    
+    .header p {
+        color: #999;
+    }
+    
+    .setting-item {
+        border-bottom-color: #404040;
+    }
+    
+    .setting-label span {
+        color: #e1e1e1;
+    }
+    
+    .setting-label p {
+        color: #999;
+    }
+    
+    .slider {
+        background-color: #555;
+    }
+    
+    input:checked + .slider {
+        background-color: #e1e1e1;
+    }
+    
+    .input-group input {
+        background: #404040;
+        border-color: #555;
+        color: #e1e1e1;
+    }
+    
+    .save-btn {
+        background: #e1e1e1;
+        color: #333;
+        border-color: #e1e1e1;
+    }
+    
+    .reset-btn {
+        background: #404040;
+        color: #e1e1e1;
+        border-color: #555;
+    }
+    
+    .actions {
+        border-top-color: #404040;
+    }
+    
+    .footer {
+        background: #333;
+        border-top-color: #404040;
+    }
+    
+    .stat-value {
+        color: #e1e1e1;
+    }
+    
+    .info p {
+        color: #999;
+    }
+}
+
+/* Performance Section */
+.performance-section {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e1e1e1;
+}
+
+.performance-section h3 {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.stat-card {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e1e1e1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stat-number {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Dark mode for performance section */
+[data-theme="dark"] .performance-section,
+.dark .performance-section {
+    background: #404040;
+    border-top-color: #555;
+}
+
+[data-theme="dark"] .performance-section h3,
+.dark .performance-section h3 {
+    color: #e1e1e1;
+}
+
+[data-theme="dark"] .stat-card,
+.dark .stat-card {
+    background: #333;
+    border-color: #555;
+}
+
+[data-theme="dark"] .stat-number,
+.dark .stat-number {
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .stat-label,
+.dark .stat-label {
+    color: #999;
+}

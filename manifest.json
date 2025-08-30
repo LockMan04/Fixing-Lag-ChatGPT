@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Fixing lag ChatGPT",
+  "version": "2.0.0",
+  "description": "Tự động ẩn tin nhắn cũ để giảm lag và tăng tốc cuộn trang trong ChatGPT",
+  
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  
+  "host_permissions": [
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*"
+  ],
+  
+  "background": {
+    "service_worker": "src/background/main.js",
+    "type": "module"
+  },
+  
+  "content_scripts": [{
+    "matches": [
+      "https://chat.openai.com/*",
+      "https://chatgpt.com/*"
+    ],
+    "js": ["src/content/main.js"],
+    "css": ["styles.css"]
+  }],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Fixing lag ChatGPT",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  
+  "web_accessible_resources": [{
+    "resources": [
+      "src/shared/*.js",
+      "src/content/*.js"
+    ],
+    "matches": [
+      "https://chat.openai.com/*",
+      "https://chatgpt.com/*"
+    ]
+  }]
+}
