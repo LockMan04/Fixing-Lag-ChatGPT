@@ -15,8 +15,7 @@
   ],
   
   "background": {
-    "service_worker": "src/background/main.js",
-    "type": "module"
+    "service_worker": "src/background/main.js"
   },
   
   "content_scripts": [{
