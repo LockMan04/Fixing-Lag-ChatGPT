@@ -3,94 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixing lag ChatGPT Settings</title>
+    <title>Universal AI Chat Optimizer</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
     <div class="popup-container">
         <div class="header">
-            <h1>Fixing lag ChatGPT</h1>
-            <p>Tăng tốc ChatGPT bằng cách ẩn tin nhắn cũ</p>
-            <div class="version">v2.0.0</div>
+            <h1>Universal AI Chat Optimizer</h1>
+            <p>Tăng tốc các AI chat: ChatGPT, Claude, Grok...</p>
+            <div class="version">v2.1.0</div>
         </div>
 
-        <div class="settings-section">
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>Auto Hide</span>
-                    <p>Tự động ẩn tin nhắn cũ</p>
-                </div>
-                <label class="toggle">
-                    <input type="checkbox" id="autoHideToggle">
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>Ẩn tin nhắn trống</span>
-                    <p>Tự động ẩn tin nhắn không có nội dung</p>
-                </div>
-                <label class="toggle">
-                    <input type="checkbox" id="hideEmptyToggle">
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>Số tin nhắn hiển thị</span>
-                    <p>Số tin nhắn gần nhất được hiển thị</p>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="maxMessages" min="10" max="200" value="50">
-                    <span class="input-suffix">tin nhắn</span>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>Show More Count</span>
-                    <p>Số tin nhắn hiển thị thêm mỗi lần bấm "Show More"</p>
-                </div>
-                <div class="input-group">
-                    <input type="number" id="showMoreCount" min="5" max="50" value="20">
-                    <span class="input-suffix">tin nhắn</span>
-                </div>
-            </div>
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="settings">Cài đặt</button>
+            <button class="tab-btn" data-tab="statistics">Thống kê</button>
         </div>
 
-        <div class="actions">
-            <button id="saveBtn" class="save-btn">Lưu cài đặt</button>
-            <button id="resetBtn" class="reset-btn">Đặt lại mặc định</button>
+        <!-- Settings Tab -->
+        <div class="tab-content active" id="settings-tab">
+            <div class="platform-section">
+                <div class="current-platform">
+                    <span class="platform-label">Platform hiện tại:</span>
+                    <span id="currentPlatform" class="platform-value">Không xác định</span>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <span>Bật</span>
+                        <p>Tự động ẩn tin nhắn cũ</p>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" id="autoHideToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <span>Số tin nhắn hiển thị</span>
+                        <p>Số tin nhắn gần nhất được hiển thị</p>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="maxMessages" min="10" max="200" value="10">
+                        <span class="input-suffix">tin nhắn</span>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <span>Show More Count</span>
+                        <p>Số tin nhắn hiển thị thêm mỗi lần bấm "Show More"</p>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="showMoreCount" min="5" max="50" value="5">
+                        <span class="input-suffix">tin nhắn</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="saveBtn" class="save-btn">Lưu cài đặt</button>
+                <button id="resetBtn" class="reset-btn">Đặt lại mặc định</button>
+            </div>
+
+            <div class="status" id="status"></div>
         </div>
 
-        <div class="status" id="status"></div>
+        <!-- Statistics Tab -->
+        <div class="tab-content" id="statistics-tab">
+            <div class="stats-overview">
+                <h3>Thống kê tin nhắn</h3>
+                <div class="stats-summary">
+                    <div class="summary-card">
+                        <span class="summary-number" id="totalUserMessages">0</span>
+                        <span class="summary-label">Tin nhắn của bạn</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-number" id="totalAiMessages">0</span>
+                        <span class="summary-label">Tin nhắn AI</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-number" id="totalAllMessages">0</span>
+                        <span class="summary-label">Tổng tin nhắn</span>
+                    </div>
+                </div>
+            </div>
 
-        <div class="performance-section">
-            <h3>Hiệu suất</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number" id="hiddenCount">0</span>
-                    <span class="stat-label">Tin nhắn đã ẩn</span>
+            <div class="messages-list-section">
+                <h4>Danh sách tin nhắn <span class="messages-list-tips"> (Nhấn vào tin nhắn để xem nhảy đến)</span></h4>
+                <div class="messages-list" id="messagesList">
+                    <div class="loading-placeholder">
+                        Đang tải danh sách tin nhắn...
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-number" id="visibleCount">0</span>
-                    <span class="stat-label">Tin nhắn hiển thị</span>
-                </div>
+            </div>
+
+            <div class="export-section">
+                <button class="export-btn" id="exportCsvBtn">
+                    Xuất file CSV
+                </button>
+                <p class="export-note">Tải về tất cả tin nhắn dưới dạng file CSV</p>
             </div>
         </div>
 
         <div class="footer">
-            <div class="stats">
-                <div class="stat-item">
-                    <span class="stat-label">Trạng thái:</span>
-                    <span id="extensionStatus" class="stat-value">Đang tải...</span>
-                </div>
-            </div>
             <div class="info">
-                <p>Extension này giúp giảm lag bằng cách ẩn tin nhắn cũ, chỉ hiển thị những tin nhắn gần nhất.</p>
-                <p>Hoạt động tốt nhất với các cuộc trò chuyện dài.</p>
+                <p>Extension này hỗ trợ ChatGPT, Claude, Gemini, DeepSeek, Grok và Perplexity.</p>
+                <p>Giúp giảm lag bằng cách ẩn tin nhắn cũ, chỉ hiển thị những tin nhắn gần nhất.</p>
                 <p>Liên hệ qua github: <a href="https://github.com/LockMan04" target="_blank">LockMan04</a></p>
             </div>
         </div>
