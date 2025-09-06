@@ -9,10 +9,7 @@ const DEFAULT_SETTINGS = {
   enabledSites: {
     chatgpt: true,
     claude: true,
-    gemini: true,
-    deepseek: true,
-    grok: true,
-    perplexity: true
+    grok: true
   }
 };
 
@@ -213,25 +210,23 @@ class PopupManager {
   }
 
   async updatePerformanceStats() {
-    // Set a default state first
     this.dom.currentPlatform.textContent = 'Không xác định';
 
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!tab || !tab.url) {
-        this.dom.currentPlatform.textContent = 'Tab không hợp lệ';
-        return;
-      }
-
-      // The content script is the single source of truth for stats.
-      chrome.tabs.sendMessage(tab.id, { action: 'getStats' }, (response) => {
-        if (chrome.runtime.lastError) {
-          this.dom.currentPlatform.textContent = 'Trang không được hỗ trợ';
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const tab = tabs[0];
+        if (!tab || !tab.url) {
+          this.dom.currentPlatform.textContent = 'Tab không hợp lệ';
           return;
         }
-        if (response) {
-          this.dom.currentPlatform.textContent = response.platform || 'Không xác định';
-        }
+
+        chrome.tabs.sendMessage(tab.id, { action: 'getStats' }, (response) => {
+          if (chrome.runtime.lastError) {
+            this.dom.currentPlatform.textContent = 'Trang không được hỗ trợ';
+            return;
+          }
+          this.dom.currentPlatform.textContent = response?.platform || 'Không xác định';
+        });
       });
     } catch (error) {
       console.warn('Error updating performance stats:', error);

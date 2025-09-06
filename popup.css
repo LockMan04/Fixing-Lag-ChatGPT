@@ -555,7 +555,7 @@ input:checked + .slider:before {
 .message-item.clickable::before {
     content: "🔗";
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     right: 8px;
     font-size: 12px;
     opacity: 0.5;

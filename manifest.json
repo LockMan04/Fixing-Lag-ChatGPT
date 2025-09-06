@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Universal AI Chat Optimizer",
   "version": "2.1.0",
-  "description": "Tự động ẩn tin nhắn cũ và thống kê cuộc trò chuyện trên ChatGPT, Claude, Gemini, DeepSeek, Grok và các AI chat khác",
+  "description": "Tự động ẩn tin nhắn cũ và thống kê cuộc trò chuyện trên ChatGPT, Claude, Grok",
   
   "permissions": [
     "storage",
@@ -13,11 +13,7 @@
     "https://chat.openai.com/*",
     "https://chatgpt.com/*",
     "https://claude.ai/*",
-    "https://gemini.google.com/*",
-    "https://bard.google.com/*",
-    "https://chat.deepseek.com/*",
-    "https://grok.com/*",
-    "https://perplexity.ai/*"
+    "https://grok.com/*"
   ],
   
   "background": {
@@ -29,11 +25,7 @@
       "https://chat.openai.com/*",
       "https://chatgpt.com/*",
       "https://claude.ai/*",
-      "https://gemini.google.com/*",
-      "https://bard.google.com/*",
-      "https://chat.deepseek.com/*",
-      "https://grok.com/*",
-      "https://perplexity.ai/*"
+      "https://grok.com/*"
     ],
     "js": ["src/content/main-universal.js"],
     "css": ["styles.css"]
@@ -64,11 +56,7 @@
       "https://chat.openai.com/*",
       "https://chatgpt.com/*",
       "https://claude.ai/*",
-      "https://gemini.google.com/*",
-      "https://bard.google.com/*",
-      "https://chat.deepseek.com/*",
-      "https://grok.com/*",
-      "https://perplexity.ai/*"
+      "https://grok.com/*"
     ]
   }]
 }

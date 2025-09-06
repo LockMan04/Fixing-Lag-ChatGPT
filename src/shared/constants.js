@@ -8,10 +8,7 @@ export const DEFAULT_SETTINGS = {
   enabledSites: {
     chatgpt: true,
     claude: true,
-    gemini: true,
-    deepseek: true,
-    grok: true,
-    perplexity: true
+    grok: true
   }
 };
 

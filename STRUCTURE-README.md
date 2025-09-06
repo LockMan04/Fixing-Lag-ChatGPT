@@ -19,9 +19,6 @@ popup.html                   # Popup HTML với tab navigation
 popup.css                    # CSS cho popup với dark mode support
 styles.css                   # CSS cho content script universal
 icons/                       # Extension icons
-test-statistics.html         # File test tính năng statistics
-debug-extension.html         # File debug extension
-STATISTICS-FEATURE.md        # Documentation tính năng statistics
 ```
 
 ## Lịch sử phát triển
@@ -41,7 +38,7 @@ STATISTICS-FEATURE.md        # Documentation tính năng statistics
 - Visual feedback với highlight và notifications
 
 ### v2.0.0 - Universal Multi-platform Support
-- Multi-platform support cho 6 AI chat platforms
+- Multi-platform support thêm nền tảng mới
 - Platform detection và switching tự động
 - Kiến trúc universal content script
 - Platform-specific settings
@@ -82,13 +79,13 @@ STATISTICS-FEATURE.md        # Documentation tính năng statistics
 
 ## Platform Support (v2.1.0)
 
-Hiện tại hỗ trợ 6 AI chat platforms:
+Hiện tại hỗ trợ 3 AI chat platforms:
 1. **ChatGPT** (chat.openai.com)
 2. **Claude** (claude.ai) 
-3. **Gemini** (gemini.google.com)
-4. **Perplexity** (perplexity.ai)
-5. **Copilot** (copilot.microsoft.com)
-6. **Grok** (grok.com)
+3. **Grok** (grok.com)
+<!-- 4. **Gemini** (gemini.google.com)
+5. **Perplexity** (perplexity.ai)
+6. **Copilot** (copilot.microsoft.com) -->
 
 Mỗi platform có:
 - Platform-specific selectors

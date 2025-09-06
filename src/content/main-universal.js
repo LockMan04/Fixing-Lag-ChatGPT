@@ -13,10 +13,7 @@
     enabledSites: {
       chatgpt: true,
       claude: true,
-      gemini: true,
-      deepseek: true,
-      grok: true,
-      perplexity: true
+      grok: true
     }
   };
 
@@ -460,7 +457,7 @@
             if (testidRole === 'user') {
               isUser = true;
               senderName = 'Bạn';
-            } else if (testidRole === 'assistant') {
+            } else if (testidRole === 'assistant') {các 
               isUser = false;
               senderName = 'Grok';
             } else {

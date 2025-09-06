@@ -9,22 +9,14 @@ const DEFAULT_SETTINGS = {
   enabledSites: {
     chatgpt: true,
     claude: true,
-    gemini: true,
-    deepseek: true,
     grok: true,
-    perplexity: true
   }
 };
 
 const SUPPORTED_DOMAINS = [
-  'chat.openai.com',
   'chatgpt.com',
   'claude.ai',
-  'gemini.google.com',
-  'bard.google.com',
-  'chat.deepseek.com',
   'grok.com',
-  'perplexity.ai'
 ];
 
 class BackgroundService {
