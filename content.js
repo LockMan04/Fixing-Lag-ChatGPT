@@ -4,7 +4,7 @@ class ChatGPTLagFixer {
     this.settings = {
       isEnabled: true,
       hideEmpty: true,
-      maxMessages: 50,
+      maxMessages: 10,
       showMoreCount: 20
     };
     this.hiddenMessages = [];

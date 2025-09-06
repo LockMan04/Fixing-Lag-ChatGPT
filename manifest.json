@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Fixing lag ChatGPT",
-  "version": "2.0.0",
-  "description": "Tự động ẩn tin nhắn cũ để giảm lag và tăng tốc cuộn trang trong ChatGPT",
+  "name": "Universal AI Chat Optimizer",
+  "version": "2.1.0",
+  "description": "Tự động ẩn tin nhắn cũ và thống kê cuộc trò chuyện trên ChatGPT, Claude, Grok",
   
   "permissions": [
     "storage",
@@ -11,7 +11,9 @@
   
   "host_permissions": [
     "https://chat.openai.com/*",
-    "https://chatgpt.com/*"
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://grok.com/*"
   ],
   
   "background": {
@@ -21,15 +23,17 @@
   "content_scripts": [{
     "matches": [
       "https://chat.openai.com/*",
-      "https://chatgpt.com/*"
+      "https://chatgpt.com/*",
+      "https://claude.ai/*",
+      "https://grok.com/*"
     ],
-    "js": ["src/content/main.js"],
+    "js": ["src/content/main-universal.js"],
     "css": ["styles.css"]
   }],
   
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Fixing lag ChatGPT",
+    "default_title": "Universal AI Chat Optimizer",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
@@ -50,7 +54,9 @@
     ],
     "matches": [
       "https://chat.openai.com/*",
-      "https://chatgpt.com/*"
+      "https://chatgpt.com/*",
+      "https://claude.ai/*",
+      "https://grok.com/*"
     ]
   }]
 }

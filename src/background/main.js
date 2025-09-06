@@ -1,17 +1,23 @@
-// Background service worker for Fixing lag ChatGPT extension
+// Background service worker for Universal AI Chat Optimizer
 
 // Constants
 const DEFAULT_SETTINGS = {
   isEnabled: true,
   hideEmpty: true,
-  maxMessages: 50,
-  showMoreCount: 20
+  maxMessages: 10,
+  showMoreCount: 5,
+  enabledSites: {
+    chatgpt: true,
+    claude: true,
+    grok: true,
+  }
 };
 
-const DOMAINS = {
-  OPENAI: 'chat.openai.com',
-  CHATGPT: 'chatgpt.com'
-};
+const SUPPORTED_DOMAINS = [
+  'chatgpt.com',
+  'claude.ai',
+  'grok.com',
+];
 
 class BackgroundService {
   constructor() {
@@ -24,7 +30,7 @@ class BackgroundService {
       this.setDefaultSettings();
     });
 
-    // Listen for tab updates to inject extension on ChatGPT pages
+    // Listen for tab updates to inject extension on supported AI platforms
     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       this.handleTabUpdate(tabId, changeInfo, tab);
     });
@@ -40,9 +46,13 @@ class BackgroundService {
     chrome.storage.sync.set(DEFAULT_SETTINGS);
   }
 
+  isSupportedURL(url) {
+    return SUPPORTED_DOMAINS.some(domain => url.includes(domain));
+  }
+
   handleTabUpdate(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete' && tab.url) {
-      if (tab.url.includes(DOMAINS.OPENAI) || tab.url.includes(DOMAINS.CHATGPT)) {
+      if (this.isSupportedURL(tab.url)) {
         chrome.tabs.sendMessage(tabId, { action: 'pageLoaded' }).catch(() => {
           // Ignore errors - content script might not be ready yet
         });

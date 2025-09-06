@@ -1,147 +1,195 @@
-# Fixing lag ChatGPT Extension v2.0.0
+# Universal AI Chat Optimizer v2.1.0
 
 ## Cấu trúc dự án
 
 ```
 src/
-├── shared/           # Code dùng chung
-│   ├── constants.js  # Hằng số và cấu hình
-│   └── utils.js      # Utility functions
-├── content/          # Content scripts
-│   ├── main.js              # Content script chính
-│   ├── message-manager.js   # Quản lý tin nhắn
-│   ├── show-more-button.js  # Component nút Show More
-│   └── chat-observer.js     # Observer cho DOM changes
-├── popup/            # Popup UI
-│   ├── main.js              # Popup script chính
-│   └── popup-manager.js     # Quản lý popup logic
-└── background/       # Background service worker
-    └── main.js       # Background script chính
+├── shared/                  # Code dùng chung
+│   └── constants.js         # Hằng số và cấu hình cho tất cả platforms
+├── content/                 # Content scripts
+│   └── main-universal.js    # Universal content script cho tất cả platforms
+├── popup/                   # Popup UI
+│   └── main.js              # Popup script với tab navigation và statistics
+└── background/              # Background service worker
+    └── main.js              # Background script chính
 
 # Root files
-manifest.json         # Extension manifest (cũ)
-manifest-new.json     # Extension manifest (mới, modular)
-popup.html           # Popup HTML (cũ)
-popup-new.html       # Popup HTML (mới, sử dụng modules)
-styles.css           # CSS cho content script
-popup.css            # CSS cho popup
-icons/               # Extension icons
+manifest.json                # Extension manifest V3
+popup.html                   # Popup HTML với tab navigation
+popup.css                    # CSS cho popup với dark mode support
+styles.css                   # CSS cho content script universal
+icons/                       # Extension icons
 ```
 
-## So sánh phiên bản
+## Lịch sử phát triển
 
-### Phiên bản cũ (v1.x):
-- **1 file content.js** - 350+ dòng code
-- **1 file popup.js** - 240+ dòng code
-- **1 file background.js** - 35+ dòng code
-- Khó bảo trì và debug
+### v2.1.0 - Statistics & Navigation Update (Current)
+**Tính năng thống kê hoàn toàn mới**
+- Tab statistics trong popup với thống kê chi tiết
+- Click navigation để nhảy đến tin nhắn cụ thể
+- CSV export với đầy đủ thông tin cuộc trò chuyện
+- Smart reveal hiện tất cả tin nhắn từ đầu đến vị trí được click
+- Message protection system để tránh re-hiding
 
-### Phiên bản mới (v2.0):
-- **Chia thành 8 modules** nhỏ
-- **Separation of concerns** rõ ràng
-- **JavaScript modules** với import/export
-- **Dễ test và bảo trì**
+**Cải tiến UI/UX**
+- Tab navigation với 2 tab: Settings và Statistics
+- Dark mode support đầy đủ
+- Loading states và error handling
+- Visual feedback với highlight và notifications
 
-## Tính năng từng module
+### v2.0.0 - Universal Multi-platform Support
+- Multi-platform support thêm nền tảng mới
+- Platform detection và switching tự động
+- Kiến trúc universal content script
+- Platform-specific settings
 
-### **shared/constants.js**
-- Cài đặt mặc định
-- CSS selectors
-- Tên miền
-- Cấu hình thời gian
+### v1.x.x - ChatGPT Only (Legacy)
+- Hỗ trợ chỉ ChatGPT
+- Single file structure
+- Kiến trúc đơn giản
 
-### **shared/utils.js**  
-- DOMUtils: Thao tác DOM
-- MessageValidator: Logic validate tin nhắn
-- StorageUtils: Thao tác Chrome storage
+## Kiến trúc hiện tại
 
-### **content/main.js**
-- Content script chính
-- Điều phối tất cả chức năng content
+### **src/shared/constants.js**
+- Cài đặt mặc định cho tất cả platforms
+- Platform configurations với selectors riêng biệt
+- CSS class names và constants chung
 
-### **content/message-manager.js**
-- Logic ẩn/hiện tin nhắn
-- Theo dõi thống kê
-- Quản lý cài đặt
+### **src/content/main-universal.js**
+- Platform detection tự động 
+- Universal content script cho 6 platforms
+- Message Manager với analyzeMessage và getDetailedStats
+- Statistics collection và storage
+- Show more button management
+- Click navigation system với smart reveal
+- Message protection để tránh re-hiding tin nhắn
 
-### **content/show-more-button.js**
-- Component nút floating
-- Xử lý sự kiện
-- Cập nhật UI
+### **src/popup/main.js**
+- Tab navigation giữa Settings và Statistics
+- Statistics display với detailed breakdown
+- CSV export với UTF-8 BOM support
+- Click-to-scroll functionality
+- Dark mode toggle và UI management
+- Error handling và loading states
 
-### **content/chat-observer.js**
-- DOM mutation observer
-- Phát hiện thay đổi URL
-- Xử lý sự kiện debounced
+### **src/background/main.js**
+- Background service worker đơn giản
+- Extension lifecycle management
+- Platform domain permissions
 
-### **popup/popup-manager.js**
-- Logic UI popup
-- Validate cài đặt
-- Giao tiếp với content script
+## Platform Support (v2.1.0)
 
-### **background/main.js**
-- Logic service worker
-- Quản lý storage
-- Giao tiếp tab
+Hiện tại hỗ trợ 3 AI chat platforms:
+1. **ChatGPT** (chat.openai.com)
+2. **Claude** (claude.ai) 
+3. **Grok** (grok.com)
+<!-- 4. **Gemini** (gemini.google.com)
+5. **Perplexity** (perplexity.ai)
+6. **Copilot** (copilot.microsoft.com) -->
 
-## Lợi ích của cấu trúc mới
+Mỗi platform có:
+- Platform-specific selectors
+- Cấu hình riêng cho message và container detection
+- CSS styling phù hợp
+
+## Tính năng Statistics v2.1.0
+
+### Thống kê cơ bản
+- Tổng số tin nhắn theo platform
+- Phân loại User và AI messages
+- Timestamp của cuộc trò chuyện đầu và cuối
+
+### Tính năng nâng cao
+- **Click navigation**: Click vào tin nhắn trong statistics để nhảy đến vị trí đó
+- **Smart reveal**: Tự động hiện tất cả tin nhắn từ đầu đến vị trí được click
+- **CSV export**: Xuất toàn bộ conversation data với encoding UTF-8
+- **Real-time updates**: Statistics cập nhật real-time khi có tin nhắn mới
+
+## File Structure Details
+
+### Content Script (`main-universal.js`)
+```javascript
+class PlatformDetector        // Phát hiện platform hiện tại
+class MessageManager         // Quản lý tin nhắn và statistics
+class ShowMoreButton         // Quản lý nút Show More
+```
+
+### Popup (`main.js`)  
+```javascript
+Tab Navigation              // Chuyển đổi giữa Settings/Statistics
+Statistics Display          // Hiển thị thống kê chi tiết
+CSV Export                  // Xuất dữ liệu ra file CSV
+Click Navigation            // Nhảy đến tin nhắn được click
+```
+
+### Storage Structure
+```javascript
+{
+  "chatStats": {
+    "platformName": {
+      "messages": [...],
+      "totalCount": number,
+      "userCount": number,
+      "aiCount": number,
+      "firstMessageTime": timestamp,
+      "lastMessageTime": timestamp
+    }
+  }
+}
+```
+
+## Lợi ích của kiến trúc v2.1.0
 
 ### **Maintainability**
-- Mỗi file có trách nhiệm rõ ràng
-- Dễ tìm và sửa lỗi
-- Tái sử dụng code tốt hơn
+- Universal content script đơn giản hóa codebase
+- Platform detection tự động
+- Modular structure dễ debug và maintain
 
-### **Scalability**  
-- Dễ thêm tính năng mới
-- Không ảnh hưởng code khác
-- Modular testing
+### **Statistics & Navigation**  
+- Real-time statistics tracking
+- Click-to-navigate functionality
+- CSV export với full conversation data
+- Smart reveal system
 
 ### **Performance**
-- Tree shaking với JavaScript modules
-- Lazy loading components
-- Quản lý bộ nhớ tốt hơn
+- Single universal script thay vì multiple platform-specific scripts
+- Efficient message protection system
+- Optimized DOM operations với platform-specific selectors
 
-### **Developer Experience**
-- IntelliSense tốt hơn
-- Type safety với JSDoc
-- Debug dễ hơn
+### **User Experience**
+- Tab navigation trong popup
+- Dark mode support
+- Visual feedback và notifications
+- Error handling và loading states
 
-## Cách chuyển đổi
+## Hướng dẫn sử dụng v2.1.0
 
-### Bước 1: Sao lưu phiên bản cũ
-```bash
-# Sao lưu files hiện tại
-cp manifest.json manifest-old.json
-cp popup.html popup-old.html
-cp content.js content-old.js
-cp popup.js popup-old.js
-cp background.js background-old.js
-```
+### Cài đặt Extension
+1. Load unpacked extension tại `chrome://extensions/`
+2. Chọn folder chứa extension
+3. Enable extension
 
-### Bước 2: Sử dụng files mới
-```bash
-# Thay thế bằng files mới
-mv manifest-new.json manifest.json
-mv popup-new.html popup.html
-```
+### Sử dụng Statistics
+1. Click vào extension icon
+2. Chuyển sang tab "Statistics"
+3. Xem thống kê chi tiết theo platform
+4. Click vào tin nhắn để jump đến vị trí đó
+5. Export CSV nếu cần backup data
 
-### Bước 3: Test và triển khai
-1. Reload extension tại `chrome://extensions/`
-2. Test tất cả chức năng
-3. Kiểm tra console để tìm lỗi
-4. Xác minh hiệu suất
+### Settings
+1. Enable/disable extension per platform
+2. Toggle dark mode
+3. Adjust auto-hide settings
 
-## Ghi chú Migration
+## Migration từ v2.0.0
 
-- **JavaScript Modules**: Yêu cầu `"type": "module"` trong manifest
-- **Import/Export**: Tất cả shared code sử dụng JavaScript modules
-- **Error Handling**: Cải thiện với try/catch blocks
-- **Type Safety**: JSDoc comments cho IDE support tốt hơn
+### Thay đổi chính
+- Loại bỏ multiple content scripts, chuyển sang universal script
+- Thêm tab navigation và statistics system
+- CSS được cập nhật với dark mode support
+- Storage structure được mở rộng cho statistics
 
-## Triển khai
-
-Extension mới sẽ hoạt động với:
-- Chrome Manifest V3
-- JavaScript modules support
-- Tính năng JavaScript hiện đại
-- Xử lý lỗi tốt hơn
+### Compatibility
+- Settings cũ được preserve
+- Tự động migrate sang storage structure mới
+- Không cần configuration thêm

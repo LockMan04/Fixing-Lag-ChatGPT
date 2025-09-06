@@ -1,7 +1,61 @@
-/* Styles for Fixing lag ChatGPT extension */
+/* Styles for Universal AI Chat Optimizer extension */
 
-/* Floating button - gÃ³c trÃªn bÃªn pháº£i */
-.lag-fixer-floating-btn {
+/* 
+  Combined hidden classes for legacy and universal versions.
+  This class is used to hide messages that are not in the current view.
+*/
+.lag-fixer-hidden,
+.lag-fixer-empty-hidden,
+.universal-ai-fixer-hidden,
+.universal-ai-fixer-empty-hidden {
+  display: none !important;
+}
+
+/* 
+  Protection rules to ensure that important UI elements like input forms are never hidden,
+  even if they are accidentally matched by the message selectors.
+*/
+form .lag-fixer-hidden,
+form .lag-fixer-empty-hidden,
+form .universal-ai-fixer-hidden,
+form .universal-ai-fixer-empty-hidden,
+[contenteditable] .lag-fixer-hidden,
+[contenteditable] .lag-fixer-empty-hidden,
+[contenteditable] .universal-ai-fixer-hidden,
+[contenteditable] .universal-ai-fixer-empty-hidden,
+input.lag-fixer-hidden,
+input.lag-fixer-empty-hidden,
+input.universal-ai-fixer-hidden,
+input.universal-ai-fixer-empty-hidden,
+textarea.lag-fixer-hidden,
+textarea.lag-fixer-empty-hidden,
+textarea.universal-ai-fixer-hidden,
+textarea.universal-ai-fixer-empty-hidden,
+[data-testid*="input"],
+[data-testid*="form"],
+[data-testid*="composer"] {
+  display: block !important;
+}
+
+/* Platform-specific overrides */
+/* Claude: Hide parent container when it contains hidden message elements */
+[data-test-render-count="2"]:has(.universal-ai-fixer-hidden),
+[data-test-render-count="2"]:has(.universal-ai-fixer-empty-hidden) {
+  display: none !important;
+}
+
+/* Grok: Hide parent container when it contains hidden message elements */
+.relative.group.flex.flex-col.justify-center.w-full:has(.universal-ai-fixer-hidden),
+.relative.group.flex.flex-col.justify-center.w-full:has(.universal-ai-fixer-empty-hidden) {
+  display: none !important;
+}
+
+/* 
+  Floating "Show More" button styles.
+  Includes legacy and universal class names for backward compatibility.
+*/
+.lag-fixer-floating-btn,
+.universal-ai-fixer-floating-btn {
   position: fixed;
   top: 50px;
   right: 20px;
@@ -9,7 +63,8 @@
   pointer-events: auto;
 }
 
-.floating-show-more {
+.floating-show-more,
+.universal-ai-floating-show-more {
   background: #ffffff;
   color: #333333;
   border: 1px solid #e1e1e1;
@@ -24,77 +79,59 @@
   white-space: nowrap;
 }
 
-.floating-show-more:hover {
+.floating-show-more:hover,
+.universal-ai-floating-show-more:hover {
   background: #f8f9fa;
   border-color: #d0d0d0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }
 
-.floating-show-more:active {
+.floating-show-more:active,
+.universal-ai-floating-show-more:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Hidden message classes */
-.lag-fixer-hidden {
-  display: none !important;
-}
-
-.lag-fixer-empty-hidden {
-  display: none !important;
-}
-
-/* Äáº£m báº£o khÃ´ng áº©n cÃ¡c element UI quan trá»ng */
-form .lag-fixer-hidden,
-form .lag-fixer-empty-hidden,
-[contenteditable] .lag-fixer-hidden,
-[contenteditable] .lag-fixer-empty-hidden,
-input.lag-fixer-hidden,
-input.lag-fixer-empty-hidden,
-textarea.lag-fixer-hidden,
-textarea.lag-fixer-empty-hidden {
-  display: block !important;
-}
-
-/* Báº£o vá»‡ chat input area */
-[data-testid*="input"],
-[data-testid*="form"],
-[data-testid*="composer"] {
-  display: block !important;
-}
-
-/* Dark mode support */
+/* Dark mode support for the "Show More" button */
 @media (prefers-color-scheme: dark) {
-  .floating-show-more {
+  .floating-show-more,
+  .universal-ai-floating-show-more {
     background: #2d2d2d;
     color: #e1e1e1;
     border-color: #404040;
   }
   
-  .floating-show-more:hover {
+  .floating-show-more:hover,
+  .universal-ai-floating-show-more:hover {
     background: #3d3d3d;
     border-color: #505050;
   }
 }
 
-/* ChatGPT specific dark mode */
+/* Site-specific dark mode (e.g., ChatGPT's data-theme attribute) */
 [data-theme="dark"] .floating-show-more,
-.dark .floating-show-more {
+[data-theme="dark"] .universal-ai-floating-show-more,
+.dark .floating-show-more,
+.dark .universal-ai-floating-show-more {
   background: #2d2d2d;
   color: #e1e1e1;
   border-color: #404040;
 }
 
 [data-theme="dark"] .floating-show-more:hover,
-.dark .floating-show-more:hover {
+[data-theme="dark"] .universal-ai-floating-show-more:hover,
+.dark .floating-show-more:hover,
+.dark .universal-ai-floating-show-more:hover {
   background: #3d3d3d;
   border-color: #505050;
 }
 
-/* Performance optimizations */
+/* Performance optimizations: prevent animations and transforms on hidden elements' children */
 .lag-fixer-hidden *,
-.lag-fixer-empty-hidden * {
+.lag-fixer-empty-hidden *,
+.universal-ai-fixer-hidden *,
+.universal-ai-fixer-empty-hidden * {
   will-change: auto !important;
   transform: none !important;
   animation: none !important;
