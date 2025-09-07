@@ -23,3 +23,4 @@ Thumbs.db
 tmp/
 temp/
 release/
+*.ps1

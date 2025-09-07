@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Universal AI Chat Optimizer",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Tự động ẩn tin nhắn cũ và thống kê cuộc trò chuyện trên ChatGPT, Claude, Grok",
   
   "permissions": [
