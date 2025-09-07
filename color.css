@@ -1,0 +1,142 @@
+/* Color CSS - Universal AI Chat Optimizer */
+/* All color definitions and dark mode styles */
+
+:root {
+  /* Light mode colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #fafafa;
+  --bg-hover: #e9ecef;
+  --bg-card: #f8f9fa;
+  
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-inverse: #ffffff;
+  
+  --border-primary: #e1e1e1;
+  --border-secondary: #dddddd;
+  --border-hover: #999999;
+  --border-active: #007bff;
+  
+  --accent-primary: #007bff;
+  --accent-success: #28a745;
+  --accent-danger: #dc3545;
+  --accent-warning: #ffc107;
+  --accent-info: #17a2b8;
+  --accent-purple: #6f42c1;
+  
+  --button-primary-bg: #333333;
+  --button-primary-hover: #555555;
+  --button-secondary-bg: #ffffff;
+  --button-secondary-hover: #f8f9fa;
+  
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --shadow-heavy: rgba(0, 0, 0, 0.2);
+  
+  --toggle-bg: #cccccc;
+  --toggle-checked: #333333;
+  
+  --version-bg: #f5f5f5;
+  
+  /* Message specific */
+  --msg-user-color: #007bff;
+  --msg-ai-color: #6f42c1;
+  --msg-hover-bg: #e3f2fd;
+  --msg-hover-border: #2196f3;
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #333333;
+    --bg-hover: #404040;
+    --bg-card: #333333;
+    
+    --text-primary: #e1e1e1;
+    --text-secondary: #999999;
+    --text-tertiary: #666666;
+    --text-inverse: #333333;
+    
+    --border-primary: #404040;
+    --border-secondary: #555555;
+    --border-hover: #666666;
+    --border-active: #60a5fa;
+    
+    --accent-primary: #60a5fa;
+    --accent-success: #34d399;
+    --accent-danger: #f87171;
+    --accent-warning: #fbbf24;
+    --accent-info: #22d3ee;
+    --accent-purple: #c084fc;
+    
+    --button-primary-bg: #e1e1e1;
+    --button-primary-hover: #f3f4f6;
+    --button-secondary-bg: #404040;
+    --button-secondary-hover: #4a4a4a;
+    
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --shadow-heavy: rgba(0, 0, 0, 0.5);
+    
+    --toggle-bg: #555555;
+    --toggle-checked: #e1e1e1;
+    
+    --version-bg: #404040;
+    
+    /* Message specific */
+    --msg-user-color: #60a5fa;
+    --msg-ai-color: #c084fc;
+    --msg-hover-bg: #1e3a8a;
+    --msg-hover-border: #3b82f6;
+  }
+}
+
+/* Manual dark mode class */
+.dark {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #333333;
+  --bg-hover: #404040;
+  --bg-card: #333333;
+  
+  --text-primary: #e1e1e1;
+  --text-secondary: #999999;
+  --text-tertiary: #666666;
+  --text-inverse: #333333;
+  
+  --border-primary: #404040;
+  --border-secondary: #555555;
+  --border-hover: #666666;
+  --border-active: #60a5fa;
+  
+  --accent-primary: #60a5fa;
+  --accent-success: #34d399;
+  --accent-danger: #f87171;
+  --accent-warning: #fbbf24;
+  --accent-info: #22d3ee;
+  --accent-purple: #c084fc;
+  
+  --button-primary-bg: #e1e1e1;
+  --button-primary-hover: #f3f4f6;
+  --button-secondary-bg: #404040;
+  --button-secondary-hover: #4a4a4a;
+  
+  --shadow-light: rgba(0, 0, 0, 0.3);
+  --shadow-medium: rgba(0, 0, 0, 0.4);
+  --shadow-heavy: rgba(0, 0, 0, 0.5);
+  
+  --toggle-bg: #555555;
+  --toggle-checked: #e1e1e1;
+  
+  --version-bg: #404040;
+  
+  /* Message specific */
+  --msg-user-color: #60a5fa;
+  --msg-ai-color: #c084fc;
+  --msg-hover-bg: #1e3a8a;
+  --msg-hover-border: #3b82f6;
+}

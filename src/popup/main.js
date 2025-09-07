@@ -330,7 +330,7 @@ class PopupManager {
       document.body.removeChild(link);
       
       const originalText = this.dom.exportCsvBtn.textContent;
-      this.dom.exportCsvBtn.textContent = '✅ Đã tải về!';
+      this.dom.exportCsvBtn.textContent = 'Đã tải về!';
       this.dom.exportCsvBtn.disabled = true;
       
       setTimeout(() => {
