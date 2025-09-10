@@ -1,4 +1,4 @@
-// Main popup script for Universal AI Chat Optimizer
+// Main popup script for Universal AI Optimizer
 
 // Constants
 const DEFAULT_SETTINGS = {
@@ -12,6 +12,51 @@ const DEFAULT_SETTINGS = {
     grok: true
   }
 };
+
+// Message content prefixes to remove
+const MESSAGE_PREFIXES_TO_REMOVE = [
+  "ChatGPT đã nói:",
+  "Bạn đã nói:",
+  "Claude đã nói:",
+  "Grok đã nói:",
+  "Model đã nói:",
+  "AI đã nói:",
+  "User:",
+  "Assistant:",
+  "Human:",
+  "Bot:",
+  "You:",
+  "Me:",
+  "ChatGPT:",
+  "Claude:",
+  "Grok:",
+  "Model:",
+  "Model",
+  "User",
+  "AI:",
+  "Bạn:",
+  "Tôi:",
+  // Common English prefixes
+  "User said:",
+  "Assistant said:",
+  "ChatGPT said:",
+  "Claude said:",
+  "Grok said:",
+  "Model said:",
+  "AI said:",
+  // Common Vietnamese patterns
+  "Người dùng:",
+  "Trợ lý:",
+  "Người dùng đã nói:",
+  "Trợ lý đã nói:",
+  "Hệ thống:",
+  // Short prefixes
+  "U:",
+  "A:",
+  "Q:",
+  "A:",
+  // TODO: Thêm các prefix khác vào đây khi cần
+];
 
 // Storage Utils
 const StorageUtils = {
@@ -29,6 +74,26 @@ const StorageUtils = {
         resolve();
       });
     });
+  },
+
+  async loadActiveTab() {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({ action: 'getActiveTab' }, (response) => {
+        // Background script trả về string trực tiếp, không phải object
+        resolve(response || 'settings');
+      });
+    });
+  },
+
+  async saveActiveTab(tabName) {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({ 
+        action: 'saveActiveTab', 
+        activeTab: tabName 
+      }, (response) => {
+        resolve(response);
+      });
+    });
   }
 };
 
@@ -44,9 +109,11 @@ class PopupManager {
   async init() {
     this.cacheDOMElements();
     await this.loadSettings();
+    await this.loadActiveTab(); // Load saved active tab
     this.setupTabNavigation();
     this.setupEventListeners();
     this.updateUI();
+    this.hideAiStudioNote(); // Initially hide the note
     this.updatePerformanceStats();
   }
 
@@ -65,6 +132,7 @@ class PopupManager {
     this.dom.totalAiMessages = document.getElementById('totalAiMessages');
     this.dom.totalAllMessages = document.getElementById('totalAllMessages');
     this.dom.messagesList = document.getElementById('messagesList');
+    this.dom.aiStudioNote = document.querySelector('.note');
   }
 
   setupTabNavigation() {
@@ -78,11 +146,66 @@ class PopupManager {
         btn.classList.add('active');
         document.getElementById(`${targetTab}-tab`).classList.add('active');
         
+        // Save active tab
+        this.saveActiveTab(targetTab);
+        
         if (targetTab === 'statistics') {
           this.loadStatisticsData();
         }
       });
     });
+  }
+
+  async loadActiveTab() {
+    try {
+      const activeTab = await StorageUtils.loadActiveTab();
+      // Nếu không có tab được lưu hoặc tab không hợp lệ, dùng 'settings' làm mặc định
+      const validTab = activeTab && ['settings', 'statistics'].includes(activeTab) ? activeTab : 'settings';
+      this.setActiveTab(validTab);
+    } catch (error) {
+      console.warn('Failed to load active tab:', error);
+      // Fallback to settings tab
+      this.setActiveTab('settings');
+    }
+  }
+
+  setActiveTab(tabName) {
+    // Đảm bảo tabName hợp lệ, mặc định là 'settings'
+    const validTabName = tabName && ['settings', 'statistics'].includes(tabName) ? tabName : 'settings';
+    
+    // Remove active class from all tabs
+    this.dom.tabBtns.forEach(b => b.classList.remove('active'));
+    this.dom.tabContents.forEach(c => c.classList.remove('active'));
+    
+    // Set active tab
+    const targetBtn = document.querySelector(`[data-tab="${validTabName}"]`);
+    const targetContent = document.getElementById(`${validTabName}-tab`);
+    
+    if (targetBtn && targetContent) {
+      targetBtn.classList.add('active');
+      targetContent.classList.add('active');
+      
+      if (validTabName === 'statistics') {
+        this.loadStatisticsData();
+      }
+    } else {
+      // Fallback: force settings tab if nothing found
+      const settingsBtn = document.querySelector(`[data-tab="settings"]`);
+      const settingsContent = document.getElementById(`settings-tab`);
+      
+      if (settingsBtn && settingsContent) {
+        settingsBtn.classList.add('active');
+        settingsContent.classList.add('active');
+      }
+    }
+  }
+
+  async saveActiveTab(tabName) {
+    try {
+      await StorageUtils.saveActiveTab(tabName);
+    } catch (error) {
+      console.warn('Failed to save active tab:', error);
+    }
   }
 
   async loadSettings() {
@@ -223,14 +346,36 @@ class PopupManager {
         chrome.tabs.sendMessage(tab.id, { action: 'getStats' }, (response) => {
           if (chrome.runtime.lastError) {
             this.dom.currentPlatform.textContent = 'Trang không được hỗ trợ';
+            this.hideAiStudioNote();
             return;
           }
-          this.dom.currentPlatform.textContent = response?.platform || 'Không xác định';
+          const platform = response?.platform || 'Không xác định';
+          this.dom.currentPlatform.textContent = platform;
+          
+          // Show/hide AI Studio note based on platform
+          if (platform === 'AI Studio' || platform === 'Google AI Studio' || platform.toLowerCase().includes('aistudio')) {
+            this.showAiStudioNote();
+          } else {
+            this.hideAiStudioNote();
+          }
         });
       });
     } catch (error) {
       console.warn('Error updating performance stats:', error);
       this.dom.currentPlatform.textContent = 'Lỗi';
+      this.hideAiStudioNote();
+    }
+  }
+
+  showAiStudioNote() {
+    if (this.dom.aiStudioNote) {
+      this.dom.aiStudioNote.style.display = 'block';
+    }
+  }
+
+  hideAiStudioNote() {
+    if (this.dom.aiStudioNote) {
+      this.dom.aiStudioNote.style.display = 'none';
     }
   }
 
@@ -244,24 +389,28 @@ class PopupManager {
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       if (!tab || !tab.url) {
+        console.error('[Popup] No active tab found');
         this.showStatisticsError('Không thể truy cập tab hiện tại');
         return;
       }
 
       chrome.tabs.sendMessage(tab.id, { action: 'getDetailedStats' }, (response) => {
         if (chrome.runtime.lastError) {
+          console.error('[Popup] Runtime error:', chrome.runtime.lastError);
           this.showStatisticsError('Không thể lấy dữ liệu, hãy thử tải lại trang và mở lại popup');
           return;
         }
+        
         if (response && response.messages) {
           this.displayStatistics(response);
           this.currentStatsData = response; // Store for CSV export
         } else {
+          console.warn('[Popup] No messages in response:', response);
           this.showStatisticsError('Không có dữ liệu thống kê');
         }
       });
     } catch (error) {
-      console.warn('Error loading statistics:', error);
+      console.error('[Popup] Error loading statistics:', error);
       this.showStatisticsError('Có lỗi khi tải thống kê');
     }
   }
@@ -276,15 +425,20 @@ class PopupManager {
       return;
     }
 
-    const messagesHtml = data.messages.map((message) => `
-      <div class="message-item clickable" data-message-id="${message.messageId}" title="Click để nhảy đến tin nhắn này">
-        <div class="message-header">
-          <span class="message-sender ${message.isUser ? '' : 'ai'}">${message.sender}</span>
-          <span class="message-time">#${message.index}</span>
+    const messagesHtml = data.messages.map((message, index) => {
+      // Clean the display content by removing prefixes
+      const cleanedContent = this.cleanMessageContent(message.displayContent);
+
+      return `
+        <div class="message-item clickable" data-message-id="${message.messageId}" title="Click để nhảy đến tin nhắn này">
+          <div class="message-header">
+            <span class="message-sender ${message.isUser ? '' : 'ai'}">${message.sender}</span>
+            <span class="message-time">#${message.index}</span>
+          </div>
+          <div class="message-content">${this.escapeHtml(cleanedContent)}</div>
         </div>
-        <div class="message-content">${this.escapeHtml(message.displayContent)}</div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
 
     this.dom.messagesList.innerHTML = messagesHtml;
     
@@ -307,6 +461,29 @@ class PopupManager {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  // Clean message content by removing common prefixes
+  cleanMessageContent(content) {
+    if (!content || typeof content !== 'string') return content;
+    
+    let cleanedContent = content.trim();
+    
+    // Remove each prefix if found at the beginning (case insensitive)
+    for (const prefix of MESSAGE_PREFIXES_TO_REMOVE) {
+      const lowerContent = cleanedContent.toLowerCase();
+      const lowerPrefix = prefix.toLowerCase();
+      
+      if (lowerContent.startsWith(lowerPrefix)) {
+        cleanedContent = cleanedContent.substring(prefix.length).trim();
+        break; // Only remove the first matching prefix
+      }
+    }
+    
+    // Remove extra whitespace and line breaks at the beginning
+    cleanedContent = cleanedContent.replace(/^[\s\n\r]+/, '');
+    
+    return cleanedContent;
   }
 
   async handleExportCsv() {
@@ -349,10 +526,13 @@ class PopupManager {
     const csvRows = [headers.join(',')];
     
     data.messages.forEach((message) => {
+      // Clean content for CSV export too
+      const cleanedContent = this.cleanMessageContent(message.content);
+      
       const row = [
         message.index,
         `"${message.sender}"`, 
-        `"${this.escapeCsv(message.content)}"`, 
+        `"${this.escapeCsv(cleanedContent)}"`,, 
         message.length,
         `"${new Date().toLocaleString('vi-VN')}"`
       ];

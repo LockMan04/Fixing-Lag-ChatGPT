@@ -421,8 +421,13 @@ input:checked + .slider:before {
   padding: 15px 20px;
   max-height: 300px;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
+.messages-list-section::-webkit-scrollbar {
+  display: none;
+}
 
 .messages-list-section h4 {
   font-size: 14px;
@@ -549,6 +554,18 @@ input:checked + .slider:before {
   font-size: 11px;
   color: var(--text-secondary);
   margin: 0;
+}
+
+.note {
+  background: var(--bg-secondary);
+  border-left: 4px solid var(--accent-warning);
+  padding: 10px 14px;
+  margin: 12px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  border-radius: 4px;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 /* Optional: respect [data-theme="dark"] token scopes if you toggle themes manually.

@@ -1,4 +1,4 @@
-# Universal AI Chat Optimizer v2.1.0
+# Universal AI Optimizer v2.2.0
 
 ## Cấu trúc dự án
 
@@ -7,189 +7,239 @@ src/
 ├── shared/                  # Code dùng chung
 │   └── constants.js         # Hằng số và cấu hình cho tất cả platforms
 ├── content/                 # Content scripts
-│   └── main-universal.js    # Universal content script cho tất cả platforms
+│   ├── main-modular.js      # Main content script với modular architecture
+│   ├── ChatObserver.js      # Observer theo dõi thay đổi DOM
+│   ├── DOMUtils.js          # Utilities cho DOM manipulation
+│   ├── MessageManager.js    # Quản lý tin nhắn và thống kê
+│   ├── MessageValidator.js  # Validation tin nhắn theo platform
+│   ├── PlatformDetector.js  # Phát hiện platform hiện tại
+│   ├── ScrollToTop.js       # Nút scroll to top/bottom
+│   ├── ShowMoreButton.js    # Nút "Show More" cho tin nhắn ẩn
+│   └── StorageUtils.js      # Utilities cho Chrome Storage
 ├── popup/                   # Popup UI
-│   └── main.js              # Popup script với tab navigation và statistics
+│   └── main.js              # Popup script với tab navigation và tab memory
 └── background/              # Background service worker
-    └── main.js              # Background script chính
+    └── main.js              # Background script với tab persistence
 
 # Root files
 manifest.json                # Extension manifest V3
 popup.html                   # Popup HTML với tab navigation
-popup.css                    # CSS cho popup với dark mode support
+popup.css                    # CSS cho popup với dark mode
+color.css                    # Color scheme và dark mode
 styles.css                   # CSS cho content script universal
-icons/                       # Extension icons
+icons/                       # Extension icons (16, 48, 128px)
 ```
 
 ## Lịch sử phát triển
 
-### v2.1.0 - Statistics & Navigation Update (Current)
-**Tính năng thống kê hoàn toàn mới**
-- Tab statistics trong popup với thống kê chi tiết
-- Click navigation để nhảy đến tin nhắn cụ thể
-- CSV export với đầy đủ thông tin cuộc trò chuyện
-- Smart reveal hiện tất cả tin nhắn từ đầu đến vị trí được click
-- Message protection system để tránh re-hiding
+### v2.2.0 - Google AI Studio & Scroll Controls (Current)
+**Google AI Studio Support**
+- Hỗ trợ đầy đủ aistudio.google.com
+- Platform detection cho AI Studio
+- Message validation cho AI Studio format
 
-**Cải tiến UI/UX**
-- Tab navigation với 2 tab: Settings và Statistics
-- Dark mode support đầy đủ
-- Loading states và error handling
-- Visual feedback với highlight và notifications
+**Scroll Controls**
+- Scroll to top/bottom buttons cho AI Studio
+- Container positioning logic
+- Fallback positioning cho các layout khác nhau
 
-### v2.0.0 - Universal Multi-platform Support
-- Multi-platform support thêm nền tảng mới
-- Platform detection và switching tự động
-- Kiến trúc universal content script
-- Platform-specific settings
+**Tab Memory**
+- Ghi nhớ tab đang mở trong popup (Settings/Statistics)
+- Persistence qua Chrome Storage API
+- Background script handling cho tab state
 
-### v1.x.x - ChatGPT Only (Legacy)
-- Hỗ trợ chỉ ChatGPT
-- Single file structure
-- Kiến trúc đơn giản
+**Modular Architecture**
+- Refactor thành modular components
+- Separation of concerns cho từng chức năng
+- Improved maintainability và debugging
 
-## Kiến trúc hiện tại
+### v2.1.0 - Statistics & Navigation
+- Tab statistics với thống kê chi tiết
+- Click navigation và CSV export
+- Message protection system
+
+### v2.0.0 - Universal Multi-platform
+- Multi-platform support
+- Platform detection tự động
+- Universal content script
+
+## Kiến trúc v2.2.0
 
 ### **src/shared/constants.js**
-- Cài đặt mặc định cho tất cả platforms
-- Platform configurations với selectors riêng biệt
-- CSS class names và constants chung
+- Cài đặt mặc định cho 4 platforms
+- Platform configurations với selectors
+- AI Studio specific constants
 
-### **src/content/main-universal.js**
-- Platform detection tự động 
-- Universal content script cho 6 platforms
-- Message Manager với analyzeMessage và getDetailedStats
-- Statistics collection và storage
-- Show more button management
-- Click navigation system với smart reveal
-- Message protection để tránh re-hiding tin nhắn
+### **src/content/main-modular.js**
+- Main orchestrator cho tất cả components
+- Platform detection và initialization
+- Component lifecycle management
+- AI Studio scroll button integration
+
+### **src/content/PlatformDetector.js**
+```javascript
+class PlatformDetector {
+  static detectPlatform()     // Phát hiện platform từ URL
+  static getPlatformConfig()  // Lấy config theo platform
+}
+```
+
+### **src/content/ScrollToTop.js**
+```javascript
+class ScrollToTop {
+  constructor()               // Initialize scroll buttons
+  create()                   // Tạo nút scroll top/bottom
+  getChatContainer()         // Tìm container phù hợp
+  show()/hide()              # Toggle visibility
+}
+```
+
+### **src/content/MessageManager.js**
+```javascript
+class MessageManager {
+  analyzeMessage()           // Phân tích tin nhắn theo platform
+  getDetailedStats()         // Thống kê chi tiết
+  updateStats()              // Cập nhật thống kê real-time
+}
+```
 
 ### **src/popup/main.js**
-- Tab navigation giữa Settings và Statistics
-- Statistics display với detailed breakdown
-- CSV export với UTF-8 BOM support
-- Click-to-scroll functionality
-- Dark mode toggle và UI management
-- Error handling và loading states
+- Tab navigation với memory persistence
+- Statistics display với platform breakdown  
+- Tab state saving/loading
+- StorageUtils integration cho popup context
 
 ### **src/background/main.js**
-- Background service worker đơn giản
-- Extension lifecycle management
-- Platform domain permissions
+- Tab persistence handlers (getActiveTab/saveActiveTab)
+- Cross-component message handling
+- Storage operations cho popup
 
-## Platform Support (v2.1.0)
+## Platform Support v2.2.0
 
-Hiện tại hỗ trợ 3 AI chat platforms:
-1. **ChatGPT** (chat.openai.com)
+Hiện tại hỗ trợ 4 AI chat platforms:
+1. **ChatGPT** (chatgpt.com)
 2. **Claude** (claude.ai) 
 3. **Grok** (grok.com)
-<!-- 4. **Gemini** (gemini.google.com)
-5. **Perplexity** (perplexity.ai)
-6. **Copilot** (copilot.microsoft.com) -->
+4. **Google AI Studio** (aistudio.google.com) ⭐ NEW
 
-Mỗi platform có:
-- Platform-specific selectors
-- Cấu hình riêng cho message và container detection
-- CSS styling phù hợp
+### AI Studio Features
+- Message hiding/showing
+- Scroll to top/bottom controls
+- Container-based positioning
+- Platform-specific message detection
 
-## Tính năng Statistics v2.1.0
+## Component Details
 
-### Thống kê cơ bản
-- Tổng số tin nhắn theo platform
-- Phân loại User và AI messages
-- Timestamp của cuộc trò chuyện đầu và cuối
-
-### Tính năng nâng cao
-- **Click navigation**: Click vào tin nhắn trong statistics để nhảy đến vị trí đó
-- **Smart reveal**: Tự động hiện tất cả tin nhắn từ đầu đến vị trí được click
-- **CSV export**: Xuất toàn bộ conversation data với encoding UTF-8
-- **Real-time updates**: Statistics cập nhật real-time khi có tin nhắn mới
-
-## File Structure Details
-
-### Content Script (`main-universal.js`)
+### **ScrollToTop.js** ⭐ NEW
 ```javascript
-class PlatformDetector        // Phát hiện platform hiện tại
-class MessageManager         // Quản lý tin nhắn và statistics
-class ShowMoreButton         // Quản lý nút Show More
+Features:
+- Dual buttons (top ↑ / bottom ↓)
+- Container positioning (.chat-container priority)
+- Fixed positioning fallback
+- Auto show/hide based on scroll
+- Smooth scrolling behavior
 ```
 
-### Popup (`main.js`)  
+### **StorageUtils.js**
 ```javascript
-Tab Navigation              // Chuyển đổi giữa Settings/Statistics
-Statistics Display          // Hiển thị thống kê chi tiết
-CSV Export                  // Xuất dữ liệu ra file CSV
-Click Navigation            // Nhảy đến tin nhắn được click
+Methods:
+- loadSettings() / saveSettings()
+- loadActiveTab() / saveActiveTab()  ⭐ NEW
+- Background script communication
+- Popup context compatibility
 ```
 
-### Storage Structure
+### **Tab Memory System** ⭐ NEW
+```javascript
+Flow:
+1. Popup opens → loadActiveTab()
+2. User switches tab → saveActiveTab()
+3. Background stores → Chrome Storage
+4. Next popup open → restores last tab
+```
+
+## Storage Structure v2.2.0
+
 ```javascript
 {
+  "activeTab": "settings" | "statistics",  // ⭐ NEW
   "chatStats": {
-    "platformName": {
-      "messages": [...],
-      "totalCount": number,
-      "userCount": number,
-      "aiCount": number,
-      "firstMessageTime": timestamp,
-      "lastMessageTime": timestamp
+    "chatgpt": { messages: [...], ... },
+    "claude": { messages: [...], ... },
+    "grok": { messages: [...], ... },
+    "aistudio": { messages: [...], ... }   // ⭐ NEW
+  },
+  "settings": {
+    "enabledSites": {
+      "aistudio": true                      // ⭐ NEW
     }
   }
 }
 ```
 
-## Lợi ích của kiến trúc v2.1.0
+## File Dependencies
 
-### **Maintainability**
-- Universal content script đơn giản hóa codebase
-- Platform detection tự động
-- Modular structure dễ debug và maintain
+```
+main-modular.js
+├── PlatformDetector.js
+├── MessageManager.js
+├── ShowMoreButton.js
+├── ScrollToTop.js          ⭐ NEW (AI Studio only)
+├── ChatObserver.js
+└── StorageUtils.js
 
-### **Statistics & Navigation**  
-- Real-time statistics tracking
-- Click-to-navigate functionality
-- CSV export với full conversation data
-- Smart reveal system
+popup/main.js
+├── StorageUtils (local)    ⭐ NEW (popup-specific)
+└── Background messages
+
+background/main.js
+├── Storage handlers
+└── Tab persistence        ⭐ NEW
+```
+
+## Lợi ích v2.2.0
+
+### **Enhanced Platform Support**
+- Google AI Studio integration
+- Improved platform detection
+- Platform-specific features (scroll controls)
+
+### **Better User Experience**
+- Tab memory cho popup consistency
+- Scroll controls cho navigation dễ dàng
+- Improved positioning logic
+
+### **Modular Architecture**
+- Separated concerns cho maintenance
+- Component-based structure
+- Easier debugging và testing
 
 ### **Performance**
-- Single universal script thay vì multiple platform-specific scripts
-- Efficient message protection system
-- Optimized DOM operations với platform-specific selectors
+- Container-based positioning
+- Efficient scroll handling
+- Optimized component loading
 
-### **User Experience**
-- Tab navigation trong popup
-- Dark mode support
-- Visual feedback và notifications
-- Error handling và loading states
-
-## Hướng dẫn sử dụng v2.1.0
-
-### Cài đặt Extension
-1. Load unpacked extension tại `chrome://extensions/`
-2. Chọn folder chứa extension
-3. Enable extension
-
-### Sử dụng Statistics
-1. Click vào extension icon
-2. Chuyển sang tab "Statistics"
-3. Xem thống kê chi tiết theo platform
-4. Click vào tin nhắn để jump đến vị trí đó
-5. Export CSV nếu cần backup data
-
-### Settings
-1. Enable/disable extension per platform
-2. Toggle dark mode
-3. Adjust auto-hide settings
-
-## Migration từ v2.0.0
+## Migration từ v2.1.0
 
 ### Thay đổi chính
-- Loại bỏ multiple content scripts, chuyển sang universal script
-- Thêm tab navigation và statistics system
-- CSS được cập nhật với dark mode support
-- Storage structure được mở rộng cho statistics
+- Modular component structure
+- AI Studio platform support
+- Tab memory system
+- Scroll controls cho AI Studio
 
 ### Compatibility
-- Settings cũ được preserve
-- Tự động migrate sang storage structure mới
-- Không cần configuration thêm
+- Settings được preserve
+- Statistics data tương thích
+- Auto-migration cho activeTab storage
+
+## Usage Guidelines v2.2.0
+
+### Cho Developers
+1. Thêm platform mới: Update PlatformDetector.js + constants.js
+2. Thêm feature mới: Tạo component trong src/content/
+3. Popup changes: Update popup/main.js + background handlers
+
+### Cho Users
+1. AI Studio: Scroll buttons tự động xuất hiện
+2. Tab memory: Popup nhớ tab cuối cùng được mở
+3. Settings: Enable/disable AI Studio trong popup

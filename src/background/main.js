@@ -1,22 +1,15 @@
-// Background service worker for Universal AI Chat Optimizer
+// Các dịch vụ nền cho Universal AI Optimizer
 
-// Constants
-const DEFAULT_SETTINGS = {
-  isEnabled: true,
-  hideEmpty: true,
-  maxMessages: 10,
-  showMoreCount: 5,
-  enabledSites: {
-    chatgpt: true,
-    claude: true,
-    grok: true,
-  }
-};
+// Import shared constants
+importScripts('../shared/constants.js');
+
+const DEFAULT_SETTINGS = self.UNIVERSAL_AI_CONSTANTS.DEFAULT_SETTINGS;
 
 const SUPPORTED_DOMAINS = [
   'chatgpt.com',
   'claude.ai',
   'grok.com',
+  'aistudio.google.com'
 ];
 
 class BackgroundService {
@@ -70,6 +63,14 @@ class BackgroundService {
         this.saveSettings(request.settings, sendResponse);
         break;
       
+      case 'getActiveTab':
+        this.getActiveTab(sendResponse);
+        break;
+      
+      case 'saveActiveTab':
+        this.saveActiveTab(request.activeTab || request.tabName, sendResponse);
+        break;
+      
       default:
         sendResponse({ success: false, error: 'Unknown action' });
     }
@@ -90,6 +91,26 @@ class BackgroundService {
 
   saveSettings(settings, sendResponse) {
     chrome.storage.sync.set(settings, () => {
+      if (chrome.runtime.lastError) {
+        sendResponse({ success: false, error: chrome.runtime.lastError });
+      } else {
+        sendResponse({ success: true });
+      }
+    });
+  }
+
+  getActiveTab(sendResponse) {
+    chrome.storage.sync.get(['activeTab'], (result) => {
+      if (chrome.runtime.lastError) {
+        sendResponse('settings'); // default tab
+      } else {
+        sendResponse(result.activeTab || 'settings');
+      }
+    });
+  }
+
+  saveActiveTab(tabName, sendResponse) {
+    chrome.storage.sync.set({ activeTab: tabName }, () => {
       if (chrome.runtime.lastError) {
         sendResponse({ success: false, error: chrome.runtime.lastError });
       } else {

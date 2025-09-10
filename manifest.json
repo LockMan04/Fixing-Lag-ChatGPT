@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Universal AI Chat Optimizer",
-  "version": "2.1.1",
-  "description": "Tự động ẩn tin nhắn cũ và thống kê cuộc trò chuyện trên ChatGPT, Claude, Grok",
+  "name": "Universal AI Optimizer",
+  "version": "2.2.0",
+  "description": "Tự động ẩn tin nhắn cũ và thống kê cuộc trò chuyện trên ChatGPT, Claude, Grok, AI Studio",
   
   "permissions": [
     "storage",
@@ -13,7 +13,8 @@
     "https://chat.openai.com/*",
     "https://chatgpt.com/*",
     "https://claude.ai/*",
-    "https://grok.com/*"
+    "https://grok.com/*",
+    "https://aistudio.google.com/*"
   ],
   
   "background": {
@@ -25,15 +26,27 @@
       "https://chat.openai.com/*",
       "https://chatgpt.com/*",
       "https://claude.ai/*",
-      "https://grok.com/*"
+      "https://grok.com/*",
+      "https://aistudio.google.com/*"
     ],
-    "js": ["src/content/main-universal.js"],
+    "js": [
+      "src/shared/constants.js",
+      "src/content/PlatformDetector.js",
+      "src/content/DOMUtils.js",
+      "src/content/MessageValidator.js",
+      "src/content/StorageUtils.js",
+      "src/content/MessageManager.js",
+      "src/content/ShowMoreButton.js",
+      "src/content/ChatObserver.js",
+      "src/content/ScrollTo.js",
+      "src/content/main-modular.js"
+    ],
     "css": ["styles.css"]
   }],
   
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Universal AI Chat Optimizer",
+    "default_title": "Universal AI Optimizer",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
@@ -56,7 +69,8 @@
       "https://chat.openai.com/*",
       "https://chatgpt.com/*",
       "https://claude.ai/*",
-      "https://grok.com/*"
+      "https://grok.com/*",
+      "https://aistudio.google.com/*"
     ]
   }]
 }
